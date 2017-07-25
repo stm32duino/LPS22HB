@@ -98,7 +98,7 @@ LPS22HBSensor::LPS22HBSensor(TwoWire *i2c) : dev_i2c(i2c)
  * @param i2c object of an helper class which handles the I2C peripheral
  * @param address the address of the component's instance
  */
-LPS22HBSensor::LPS22HBSensor(TwoWire *i2c, uint8_t address) : dev_i2c(i2c), address(address)
+LPS22HBSensor::LPS22HBSensor(TwoWire *i2c, uint8_t address) : address(address), dev_i2c(i2c)
 {
   if ( LPS22HB_Set_PowerMode( (void *)this, LPS22HB_LowPower) == LPS22HB_ERROR )
   {
@@ -151,12 +151,12 @@ LPS22HBStatusTypeDef LPS22HBSensor::Enable(void)
   {
     return LPS22HB_STATUS_OK;
   }
-  
+
   if(SetODR_When_Enabled(Last_ODR) == LPS22HB_STATUS_ERROR)
   {
     return LPS22HB_STATUS_ERROR;
   }
-  
+
   isEnabled = 1;
 
   return LPS22HB_STATUS_OK;
@@ -173,13 +173,13 @@ LPS22HBStatusTypeDef LPS22HBSensor::Disable(void)
   {
     return LPS22HB_STATUS_OK;
   }
-  
+
   /* Power down the device */
   if ( LPS22HB_Set_Odr( (void *)this, LPS22HB_ODR_ONE_SHOT ) == LPS22HB_ERROR )
   {
     return LPS22HB_STATUS_ERROR;
   }
-  
+
   isEnabled = 0;
 
   return LPS22HB_STATUS_OK;
@@ -193,10 +193,10 @@ LPS22HBStatusTypeDef LPS22HBSensor::Disable(void)
 LPS22HBStatusTypeDef LPS22HBSensor::ReadID(uint8_t *p_id)
 {
   if(!p_id)
-  { 
+  {
     return LPS22HB_STATUS_ERROR;
   }
- 
+
   /* Read WHO AM I register */
   if ( LPS22HB_Get_DeviceID( (void *)this, p_id ) == LPS22HB_ERROR )
   {
