@@ -53,8 +53,6 @@
 // Components.
 LPS22HBSensor  *PressTemp;
 
-char report[256];
-
 void setup() {
   // Led.
   pinMode(13, OUTPUT);
