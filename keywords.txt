@@ -1,5 +1,5 @@
 #######################################
-# Syntax Coloring Map For ST_MEMS_Sensor_Shields
+# Syntax Coloring Map For LPS22HB
 #######################################
 
 #######################################
@@ -15,15 +15,15 @@ LPS22HBSensor	KEYWORD1	LPS22HBSensor
 Enable							KEYWORD2
 Disable							KEYWORD2
 ReadID							KEYWORD2
-Reset								KEYWORD2
-GetTemperature			KEYWORD2
+Reset							KEYWORD2
+GetTemperature					KEYWORD2
 GetODR							KEYWORD2
 SetODR							KEYWORD2
 ReadReg							KEYWORD2
 WriteReg						KEYWORD2
 IO_Read							KEYWORD2
 IO_Write						KEYWORD2
-GetPressure					KEYWORD2
+GetPressure						KEYWORD2
 
 
 #######################################

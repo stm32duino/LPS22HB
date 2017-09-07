@@ -15,10 +15,10 @@ An instance can be created and enbaled following the procedure below:
 
 The access to the sensor values is done as explained below:  
 
-  Read pressure.  
+  Read pressure and temperature.  
 
     PressTemp->GetPressure(&pressure);  
-    PressTemp->GetTemperature(&temperature);  
+    PressTemp->GetTemperature(&temperature);
 
 ## Documentation
 
