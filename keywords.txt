@@ -1,0 +1,31 @@
+#######################################
+# Syntax Coloring Map For LPS22HB
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+LPS22HBSensor	KEYWORD1	LPS22HBSensor
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+Enable							KEYWORD2
+Disable							KEYWORD2
+ReadID							KEYWORD2
+Reset							KEYWORD2
+GetTemperature					KEYWORD2
+GetODR							KEYWORD2
+SetODR							KEYWORD2
+ReadReg							KEYWORD2
+WriteReg						KEYWORD2
+IO_Read							KEYWORD2
+IO_Write						KEYWORD2
+GetPressure						KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
