@@ -126,12 +126,12 @@ class LPS22HBSensor
   private:
     LPS22HBStatusTypeDef SetODR_When_Enabled(float odr);
 	LPS22HBStatusTypeDef SetODR_When_Disabled(float odr);
-	
-	/* Configuration */
-    uint8_t address;
 
     /* Helper classes. */
     TwoWire *dev_i2c;
+
+	/* Configuration */
+    uint8_t address;
 	
 	uint8_t isEnabled;
 	float Last_ODR;
