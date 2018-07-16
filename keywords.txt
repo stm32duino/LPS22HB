@@ -6,7 +6,7 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-LPS22HBSensor	KEYWORD1	LPS22HBSensor
+LPS22HBSensor	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
