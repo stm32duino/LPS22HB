@@ -318,9 +318,9 @@ LPS22HB_Error_et LPS22HB_Set_Bdu(void *handle, LPS22HB_Bdu_et bdu)
 
 
   if(LPS22HB_WriteReg(handle, LPS22HB_CTRL_REG1, 1, &tmp))
-  return LPS22HB_OK;
+    return LPS22HB_ERROR;
 
-   return LPS22HB_OK;
+  return LPS22HB_OK;
 }
 
 /**
