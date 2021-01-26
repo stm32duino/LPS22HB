@@ -44,99 +44,103 @@
 
 
 /* Class Implementation ------------------------------------------------------*/
-
-/** Constructor
- * @param i2c object of an helper class which handles the I2C peripheral
- * @param address the address of the component's instance
- */
-LPS22HBSensor::LPS22HBSensor(TwoWire *i2c) : dev_i2c(i2c)
-{
-  address = LPS22HB_ADDRESS_HIGH;
-
-  if ( LPS22HB_Set_PowerMode( (void *)this, LPS22HB_LowPower) == LPS22HB_ERROR )
-  {
-    return;
-  }
-
-  /* Power down the device */
-  if ( LPS22HB_Set_Odr( (void *)this, LPS22HB_ODR_ONE_SHOT ) == LPS22HB_ERROR )
-  {
-    return;
-  }
-
-  /* Disable low-pass filter on LPS22HB pressure data */
-  if( LPS22HB_Set_LowPassFilter( (void *)this, LPS22HB_DISABLE) == LPS22HB_ERROR )
-  {
-    return;
-  }
-
-  /* Set low-pass filter cutoff configuration*/
-  if( LPS22HB_Set_LowPassFilterCutoff( (void *)this, LPS22HB_ODR_9) == LPS22HB_ERROR )
-  {
-    return;
-  }
-
-  /* Set block data update mode */
-  if ( LPS22HB_Set_Bdu( (void *)this, LPS22HB_BDU_NO_UPDATE ) == LPS22HB_ERROR )
-  {
-    return;
-  }
-
-  /* Set automatic increment for multi-byte read/write */
-  if( LPS22HB_Set_AutomaticIncrementRegAddress( (void *)this, LPS22HB_ENABLE) == LPS22HB_ERROR )
-  {
-    return;
-  }
-
-  isEnabled = 0;
-  Last_ODR = 25.0f;
-};
-
-
 /** Constructor
  * @param i2c object of an helper class which handles the I2C peripheral
  * @param address the address of the component's instance
  */
 LPS22HBSensor::LPS22HBSensor(TwoWire *i2c, uint8_t address) : dev_i2c(i2c), address(address)
 {
+  dev_spi = NULL;
+  isEnabled = 0;
+}
+
+/** Constructor
+ * @param spi object of an helper class which handles the SPI peripheral
+ * @param cs_pin the chip select pin
+ * @param spi_speed the SPI speed
+ */
+LPS22HBSensor::LPS22HBSensor(SPIClass *spi, int cs_pin, uint32_t spi_speed) : dev_spi(spi), cs_pin(cs_pin), spi_speed(spi_speed)
+{
+  dev_i2c = NULL;
+  address = 0;
+  isEnabled = 0;
+}
+
+/**
+ * @brief  Configure the sensor in order to be used
+ * @retval 0 in case of success, an error code otherwise
+ */
+LPS22HBStatusTypeDef LPS22HBSensor::begin(void)
+{
+  if(dev_spi)
+  {
+    // Configure CS pin
+    pinMode(cs_pin, OUTPUT);
+    digitalWrite(cs_pin, HIGH); 
+  }
+
   if ( LPS22HB_Set_PowerMode( (void *)this, LPS22HB_LowPower) == LPS22HB_ERROR )
   {
-    return;
+    return LPS22HB_STATUS_ERROR;
   }
 
   /* Power down the device */
   if ( LPS22HB_Set_Odr( (void *)this, LPS22HB_ODR_ONE_SHOT ) == LPS22HB_ERROR )
   {
-    return;
+    return LPS22HB_STATUS_ERROR;
   }
 
   /* Disable low-pass filter on LPS22HB pressure data */
   if( LPS22HB_Set_LowPassFilter( (void *)this, LPS22HB_DISABLE) == LPS22HB_ERROR )
   {
-    return;
+    return LPS22HB_STATUS_ERROR;
   }
 
   /* Set low-pass filter cutoff configuration*/
   if( LPS22HB_Set_LowPassFilterCutoff( (void *)this, LPS22HB_ODR_9) == LPS22HB_ERROR )
   {
-    return;
+    return LPS22HB_STATUS_ERROR;
   }
 
   /* Set block data update mode */
   if ( LPS22HB_Set_Bdu( (void *)this, LPS22HB_BDU_NO_UPDATE ) == LPS22HB_ERROR )
   {
-    return;
+    return LPS22HB_STATUS_ERROR;
   }
 
   /* Disable automatic increment for multi-byte read/write */
   if( LPS22HB_Set_AutomaticIncrementRegAddress( (void *)this, LPS22HB_DISABLE) == LPS22HB_ERROR )
   {
-    return;
+    return LPS22HB_STATUS_ERROR;
   }
 
   isEnabled = 0;
   Last_ODR = 25.0f;
-};
+
+  return LPS22HB_STATUS_OK;
+}
+
+/**
+ * @brief  Disable the sensor and relative resources
+ * @retval 0 in case of success, an error code otherwise
+ */
+LPS22HBStatusTypeDef LPS22HBSensor::end(void)
+{
+  /* Disable pressure and temperature sensor */
+  if (Disable() != LPS22HB_STATUS_OK)
+  {
+    return LPS22HB_STATUS_ERROR;
+  }
+
+  /* Reset CS configuration */
+  if(dev_spi)
+  {
+    // Configure CS pin
+    pinMode(cs_pin, INPUT); 
+  }
+
+  return LPS22HB_STATUS_OK;
+}
 
 
 /**
