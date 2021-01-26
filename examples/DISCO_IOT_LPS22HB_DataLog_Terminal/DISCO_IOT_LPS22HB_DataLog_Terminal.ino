@@ -47,8 +47,8 @@
 #define I2C2_SDA    PB11
 
 // Components.
-LPS22HBSensor *PressTemp;
-TwoWire *dev_i2c;
+TwoWire dev_i2c(I2C2_SDA, I2C2_SCL);
+LPS22HBSensor PressTemp(&dev_i2c);
 
 void setup() {
   // Led.
@@ -57,12 +57,11 @@ void setup() {
   SerialPort.begin(9600);
 
   // Initialize I2C bus.
-  dev_i2c = new TwoWire(I2C2_SDA, I2C2_SCL);
-  dev_i2c->begin();
+  dev_i2c.begin();
 
   // Initlialize components.
-  PressTemp = new LPS22HBSensor(dev_i2c);
-  PressTemp->Enable();
+  PressTemp.begin();
+  PressTemp.Enable();
 }
 
 void loop() {
@@ -75,8 +74,8 @@ void loop() {
 
   // Read pressure.
   float pressure, temperature;
-  PressTemp->GetPressure(&pressure);
-  PressTemp->GetTemperature(&temperature);
+  PressTemp.GetPressure(&pressure);
+  PressTemp.GetTemperature(&temperature);
 
   SerialPort.print("Pres[hPa]: ");
   SerialPort.print(pressure, 2);
